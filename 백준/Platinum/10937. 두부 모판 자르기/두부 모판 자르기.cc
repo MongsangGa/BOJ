@@ -15,8 +15,8 @@ char c;
 int go(int i, int j, int visit) {
     int &res = dp[i][j][visit];
     if (res) return res;
-    if (i == N) return res = 0;
-    if (j == N) return res = go(i + 1, 0, visit);
+    if (i == N) return 0;
+    if (j == N) return go(i + 1, 0, visit);
 
     if (!(visit & NOW)) {
         int a, b;
