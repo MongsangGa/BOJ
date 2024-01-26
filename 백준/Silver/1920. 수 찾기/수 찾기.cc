@@ -1,26 +1,33 @@
-#include<stdio.h>
-#include<algorithm>
+#include<bits/stdc++.h>
+
 using namespace std;
-int N,M,c,left,mid,right,chk,A[100001]={0};
-int main(){
-    scanf("%d",&N);
-    for(int i=0;i<N;i++) scanf("%d",&A[i]);
-    sort(A,A+N);
-    scanf("%d",&M);
-    for(int i=0;i<M;i++){
-        left=chk=0,right=N-1;
-        scanf("%d",&c);
-        while(left<=right){
-            mid=(left+right)/2;
-            if(A[mid]==c){
-                chk=1;
+
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
+#define SIZE 100'001
+int n, m, a[SIZE], target, l, r, mid;
+
+int main() {
+    fastio;
+    cin >> n;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    sort(a, a + n);
+    cin >> m;
+    while (m--) {
+        cin >> target;
+        l = 0, r = n - 1;
+        bool check = false; // 찾은지 못찾은지 확인
+        while (l <= r) {
+            mid = (l + r) / 2;
+            // a[mid] : 현재 값
+            // target : 찾고자 하는 값
+            if (a[mid] == target) { // 찾았다!
+                check = true;
                 break;
-            }
-            else if(A[mid]>c) right=mid-1;
-            else if(A[mid]<c) left=mid+1;
+            } else if (a[mid] > target) r = mid - 1; // 현재 위치가 찾고자 하는 수보다 크면, 오른쪽을 줄인다
+            else if (a[mid] < target) l = mid + 1; // 현재 위치가 찾고자 하는 수보다 작으면, 왼쪽을 늘린다
         }
-        if(chk==1) printf("1\n");
-        else printf("0\n");
+        if (check == true) cout << "1\n";
+        else cout << "0\n";
     }
     return 0;
 }
