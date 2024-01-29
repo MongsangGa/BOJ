@@ -32,11 +32,9 @@ int main() {
     }
     fill(l, l + SIZE, -1), fill(r, r + SIZE, -1);
     for (int i = 1; i <= n; i++) {
-        if (l[i] == -1) {
-            fill(chk, chk + SIZE, 0);
-            if (dfs(i))
-                res++;
-        }
+        fill(chk, chk + SIZE, 0);
+        if (dfs(i))
+            res++;
     }
     cout << res;
     return 0;
