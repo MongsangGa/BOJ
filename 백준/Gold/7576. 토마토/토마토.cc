@@ -10,7 +10,7 @@ queue<pair<int, int>> q;
 bool Check() {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < m; j++)
-            if (!board[i][j])
+            if (!vis[i][j])
                 return false;
     return true;
 }
@@ -24,7 +24,7 @@ int main() {
             if (board[i][j] == 1) {
                 q.push({i, j});
                 vis[i][j] = 1;
-            }
+            } else if (board[i][j] == -1) vis[i][j] = 1;
         }
     }
     while (!q.empty()) {
@@ -36,8 +36,8 @@ int main() {
             for (int i = 0; i < 4; i++) {
                 int nx = x + dx[i], ny = y + dy[i];
                 if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-                if (board[nx][ny] == -1 || vis[nx][ny]) continue;
-                vis[nx][ny] = 1, board[nx][ny] = 1;
+                if (vis[nx][ny]) continue;
+                vis[nx][ny] = 1;
                 q.push({nx, ny});
             }
         }
