@@ -1,45 +1,42 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-typedef long long int ll;
-#define MAX 1000001
-ll arr[MAX], stree[MAX * 4];
-ll n, m, k, a, b, c;
+#define fastio cin.tie(0), ios_base::sync_with_stdio(false);
+#define ll long long int
+#define SIZE 1'000'001
 
-ll init_tree(int node, int start, int end) {
-    if (start == end) return stree[node] = arr[start];
-    int mid = (start + end) / 2;
-    return stree[node] = init_tree(node * 2, start, mid) + init_tree(node * 2 + 1, mid + 1, end);
+ll n, m, k, a, b, c, arr[SIZE], stree[SIZE * 4];
+
+ll init(int node, int st, int en) {
+    if (st == en) return stree[node] = arr[st];
+    int mid = (st + en) / 2;
+    return stree[node] = init(node * 2, st, mid) + init(node * 2 + 1, mid + 1, en);
 }
 
-ll get_sum(int node, int start, int end, int left, int right) {
-    if (left > end || right < start) return 0;
-    if (left <= start && right >= end) return stree[node];
-    int mid = (start + end) / 2;
-    return get_sum(node * 2, start, mid, left, right) + get_sum(node * 2 + 1, mid + 1, end, left, right);
+ll update(int node, int st, int en, int idx, ll changeNum) {
+    if (idx < st || idx > en) return stree[node];
+    if (st == en) return stree[node] = changeNum;
+    int mid = (st + en) / 2;
+    return stree[node] = update(node * 2, st, mid, idx, changeNum) + update(node * 2 + 1, mid + 1, en, idx, changeNum);
 }
 
-ll update(int node, int start, int end, int index, ll value) {
-    if (index < start || index > end) return stree[node];
-    if (start == end) return stree[node] = value;
-    int mid = (start + end) / 2;
-    return stree[node] = update(node * 2, start, mid, index, value) + update(node * 2 + 1, mid + 1, end, index, value);
+ll sum(int node, int st, int en, int x, int y) {
+    if (x > en || y < st) return 0;
+    if (x <= st && en <= y) return stree[node];
+    int mid = (st + en) / 2;
+    return sum(node * 2, st, mid, x, y) + sum(node * 2 + 1, mid + 1, en, x, y);
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    fastio;
     cin >> n >> m >> k;
-    for (int i = 1; i <= n; i++)
-        cin >> arr[i];
-    init_tree(1, 1, n);
+    for (int i = 1; i <= n; i++) cin >> arr[i];
+    init(1, 1, n);
     for (int i = 0; i < m + k; i++) {
         cin >> a >> b >> c;
-        if (a == 1)
-            update(1, 1, n, b, c);
-        else if (a == 2)
-            cout << get_sum(1, 1, n, b, c) << '\n';
+        if (a & 1) update(1, 1, n, b, c);
+        else cout << sum(1, 1, n, b, c) << '\n';
     }
     return 0;
 }
