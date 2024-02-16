@@ -26,7 +26,7 @@ int main() {
     fastio
     cin >> t;
     while (t--) {
-        memset(stree, 0, sizeof(stree));
+        fill(stree,stree+SIZE*4,0);
         cin >> n >> m;
         int maxL = n + 1;
         for (int i = 1; i <= n; i++) {
