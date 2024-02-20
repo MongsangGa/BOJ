@@ -3,8 +3,8 @@
 using namespace std;
 #define fastio cin.tie(0), ios_base::sync_with_stdio(0)
 #define ll long long int
-const int SIZE = 1e5+100;
-const int INF = 1e9+1;
+#define SIZE ((int)1e5+100)
+#define INF 1e9+1
 
 int n, d;
 ll dp[SIZE], stree[SIZE * 4];
