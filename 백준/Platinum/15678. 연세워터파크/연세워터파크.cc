@@ -3,7 +3,7 @@
 using namespace std;
 #define fastio cin.tie(0), ios_base::sync_with_stdio(0)
 #define ll long long int
-#define SIZE ((int)1e5+100)
+#define SIZE ((int)1e5+1)
 #define INF 1e9+1
 
 int n, d;
