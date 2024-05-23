@@ -12,7 +12,7 @@ int n;
 vector<pii > v, res;
 
 int CCW(pii a, pii b, pii c) {
-    ll cw = 1LL * (b.x - a.x) * (c.y - b.y) - 1LL * (b.y - a.y) * (c.x - b.x);
+    ll cw = (ll) (b.x - a.x) * (c.y - b.y) - (ll) (b.y - a.y) * (c.x - b.x);
     if (!cw) return 0;
     if (cw < 0) return -1;
     if (cw > 0) return 1;
