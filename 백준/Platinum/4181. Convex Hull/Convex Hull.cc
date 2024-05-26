@@ -1,54 +1,41 @@
 #include <bits/stdc++.h>
-
+#define fastio cin.tie(0)->sync_with_stdio(0)
 using namespace std;
 
-#define fastio cin.tie(NULL), ios_base::sync_with_stdio(false)
-#define ll long long
-#define pii pair<ll,ll>
-#define x first
-#define y second
-
-int n;
-vector<pii > v, res;
+using pii = pair<int, int>;
 
 int CCW(pii a, pii b, pii c) {
-    ll ccw = (1LL * a.x * b.y + b.x * c.y + c.x * a.y) - (1LL * b.x * a.y + c.x * b.y + a.x * c.y);
-    if (ccw > 0) return 1;
-    if (ccw < 0) return -1;
-    return 0;
+	auto res = 1L * (b.first - a.first) * (c.second - a.second)
+		- 1L * (c.first - a.first) * (b.second - a.second);
+	return res ? res > 0 ? 1 : -1 : 0;
 }
 
-bool comp(pii &a, pii &b) {
-    ll ccw = CCW(v[0], a, b);
-    if (!ccw) {
-        if (a.x == b.x) return a.y > b.y;
-        else {
-            if (a.y == b.y) return a.x < b.x;
-            return a.y > b.y;
-        }
-    }
-    return ccw > 0;
+auto D(pii a, pii b) {
+	return 1L * (a.first - b.first) * (a.first - b.first)
+		+ 1L * (a.second - b.second) * (a.second - b.second);
 }
 
 int main() {
-    fastio;
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        int a, b;
-        char order;
-        cin >> a >> b >> order;
-        if (order == 'N') continue;
-        v.push_back({a, b});
-    }
-    n = v.size();
-    sort(v.begin(), v.end());
-    sort(v.begin() + 1, v.end(), comp);
-    res.push_back(v[0]), res.push_back(v[1]);
-    for (int i = 2; i < n; i++) {
-        while (res.size() >= 2 && CCW(res[res.size() - 2], res.back(), v[i]) < 0) res.pop_back();
-        res.push_back(v[i]);
-    }
-    cout << res.size() << '\n';
-    for (auto r: res) cout << r.x << ' ' << r.y << '\n';
-    return 0;
+	fastio;
+	int n; cin >> n;
+	vector v(0, pii());
+	while (n--) {
+		int a, b; char c; cin >> a >> b >> c;
+		if (c == 'Y') v.push_back({ a, b });
+	}
+	
+	n = v.size();
+	for (int i = 1; i < n; i++) if (v[0] > v[i]) swap(v[0], v[i]);
+	sort(v.begin() + 1, v.end(), [&](pii a, pii b) {
+		int res = CCW(v[0], a, b);
+		if (res) return res > 0;
+		return D(v[0], a) < D(v[0], b);
+	});
+	
+	int r = n - 1;
+	while (r > 1 && !CCW(v[0], v[r], v[r - 1])) r--;
+	reverse(v.begin() + r, v.end());
+	
+	cout << n << '\n';
+	for (auto [a, b] : v) cout << a << ' ' << b << '\n';
 }
