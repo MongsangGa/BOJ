@@ -30,7 +30,7 @@ int main() {
 		pSum2[i][m + 1] += pSum2[i - 1][m];
 	}
 	for (int i = 0; i <= m + 1; i++) {
-		if (i <= n) pSum1[n + 1][i] += pSum1[n][i + 1];
+		if (i <= m) pSum1[n + 1][i] += pSum1[n][i + 1];
 		if (i >= 1) pSum2[n + 1][i] += pSum2[n][i - 1];
 	}
 	for (int i = 1; i <= n; i++) for (int j = i; j <= n; j += 2) for (int k = 1; k <= m; k++) {
