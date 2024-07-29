@@ -1,25 +1,32 @@
 #include <bits/stdc++.h>
+
 using namespace std;
-int truck[1001],n,w,l,res,sec;
+
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define SIZE 1002
+
+int truck[SIZE], curW, curT, sec;
 queue<int> q;
-int main(){
-    scanf("%d%d%d",&n,&w,&l);
-    for(int i=0;i<n;i++) scanf("%d",&truck[i]);
-    res=sec=0;
-    for(int i=0;i<n;i++){
-        while(1){
-            if(q.size()>=w){
-                res-=q.front();
-                q.pop();
-            }
-            if(res+truck[i]<=l) break;
+
+int main() {
+    fastio;
+    int n, l, w;
+    cin >> n >> l >> w;
+    for (int i = 0; i < n; i++)
+        cin >> truck[i];
+    for (int i = 0; i < n; i++) {
+        while (1) {
+            if (q.size() >= l)
+                curW -= q.front(), q.pop();
+            if (curW + truck[i] <= w)
+                break;
             q.push(0);
-            sec++;
+            ++sec;
         }
         q.push(truck[i]);
-        res+=truck[i];
-        sec++;
+        curW += truck[i];
+        ++sec;
     }
-    printf("%d",sec+w);
+    cout << sec + l;
     return 0;
 }
