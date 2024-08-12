@@ -1,66 +1,67 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
+
 using namespace std;
-#define M 1501
-int R,C,Ei,Ej,dx[4]={0,0,-1,1},dy[4]={-1,1,0,0},res;
-char arr[M][M];
-bool swanchk[M][M],lakechk[M][M];
-queue<pair<int ,int>> swan1,swan2,lake1,lake2;
-void solve(){
-    int a,b;
-    while(!lake1.empty()){
-        tie(a,b)=lake1.front(); lake1.pop();
-        arr[a][b]='.';
-        for(int i=0;i<4;i++){
-            int x=dx[i]+a,y=dy[i]+b;
-            if(x<0 || y<0 || x>=R || y>=C || lakechk[x][y] || arr[x][y]=='.') continue;
-            if(arr[x][y]=='.') lake1.push({x,y});
-            else lake2.push({x,y});
-            lakechk[x][y]=1;
+
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define pii pair<int,int>
+#define X first
+#define Y second
+#define SIZE 1505
+
+char arr[SIZE][SIZE];
+int n, m, vis[SIZE][SIZE];
+int dx[] = {-1, 0, 1, 0}, dy[] = {0, -1, 0, 1};
+queue<pii > waterQ, swanQ;
+vector<pii > swan;
+
+void deleteIce() {
+    int wS = waterQ.size();
+    while (wS--) {
+        auto [x, y] = waterQ.front();
+        waterQ.pop();
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i], ny = y + dy[i];
+            if (nx < 0 || ny < 0 || nx >= n || ny >= m || arr[nx][ny] != 'X') continue;
+            waterQ.push({nx, ny}), arr[nx][ny] = '.';
         }
     }
 }
-bool swan(){
-    int a,b;
-    while(!swan1.empty()){
-        tie(a,b)=swan1.front(); swan1.pop();
-        if(a==Ei && b==Ej) return 1;
-        for(int i=0;i<4;i++){
-            int x=dx[i]+a,y=dy[i]+b;
-            if(x<0 || y<0 || x>=R || y>=C || swanchk[x][y]) continue;
-            if(arr[x][y]=='.') swan1.push({x,y});
-            else swan2.push({x,y});
-            swanchk[x][y]=1;
+
+bool meetSwan() {
+    queue<pii > nSwan;
+    while (!swanQ.empty()) {
+        auto [x, y] = swanQ.front();
+        swanQ.pop();
+        if (x == swan[1].X && y == swan[1].Y) return true;
+        for (int i = 0; i < 4; i++) {
+            int nx = x + dx[i], ny = y + dy[i];
+            if (nx < 0 || ny < 0 || nx >= n || ny >= m || vis[nx][ny]) continue;
+            vis[nx][ny] = 1;
+            if (arr[nx][ny] == 'X') nSwan.push({nx, ny});
+            else swanQ.push({nx, ny});
         }
     }
+    swanQ = nSwan;
+    return false;
+}
+
+int main() {
+    fastio;
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++) {
+            cin >> arr[i][j];
+            if (arr[i][j] == 'L') swan.push_back({i, j}), waterQ.push({i, j});
+            if (arr[i][j] == '.') waterQ.push({i, j});
+        }
+    swanQ.push({swan[0].X, swan[0].Y});
+    int t = 1;
+    while (t) {
+        if (meetSwan()) break;
+        ++t;
+        deleteIce();
+    }
+    cout << t - 1;
     return 0;
 }
-int main(){
-    scanf("%d%d",&R,&C);
-    for(int i=0;i<R;i++){
-        for(int j=0;j<C;j++){
-            scanf(" %1c",&arr[i][j]);
-            if(arr[i][j]=='L'){
-                if(swan1.empty()) {
-                    swan1.push({i,j});
-                    swanchk[i][j]=1;
-                }
-                else Ei=i,Ej=j;
-                arr[i][j]='.';
-            }
-            if(arr[i][j]=='.'){
-                lake1.push({i,j});
-                lakechk[i][j]=1;
-            }
-        }
-    }
-    while(1){
-        solve();
-        if(swan()) break;
-        lake1=lake2, swan1=swan2;
-        lake2=queue<pair<int,int>>();
-        swan2=queue<pair<int,int>>();
-        res++;
-    }
-    printf("%d",res);
-    return 0;
-}
+
