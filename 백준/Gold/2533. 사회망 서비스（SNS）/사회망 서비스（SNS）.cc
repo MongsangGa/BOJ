@@ -1,38 +1,35 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-#define MAX 1000001
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define SIZE 1'000'002
 
-int n, a, b, dp[2][MAX];
-vector<int> arr[MAX];
-bool check[MAX];
+int n, x, y, dp[2][SIZE]; // dp[0][now] : 얼리어답터, dp[1][now] : 일반인
+bool vis[SIZE];
+vector<int> adj[SIZE];
 
-void solve(int now) {
-    check[now] = 1;
+void DFS(int now) {
+    vis[now] = 1;
     dp[0][now] = 1;
-    // 노드가 일반인일때 1 = 자식들은 얼리어답터
-    // 노드가 얼리어답터일때 0 = 자식들의 최소값
-    int len = arr[now].size();
-    for (int i = 0; i < len; i++) {
-        int next = arr[now][i];
-        if (check[next]) continue;
-        solve(next);
-        dp[0][now] += min(dp[0][next], dp[1][next]);
-        dp[1][now] += dp[0][next];
+    for (int nxt: adj[now]) {
+        if (vis[nxt]) continue;
+        DFS(nxt);
+        dp[0][now] += min(dp[0][nxt], dp[1][nxt]);
+        dp[1][now] += dp[0][nxt];
     }
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    fastio;
     cin >> n;
     for (int i = 0; i < n - 1; i++) {
-        cin >> a >> b;
-        arr[a].push_back(b);
-        arr[b].push_back(a);
+        cin >> x >> y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
     }
-    solve(1); // 1st node start
+    DFS(1);
     cout << min(dp[0][1], dp[1][1]);
     return 0;
 }
+
