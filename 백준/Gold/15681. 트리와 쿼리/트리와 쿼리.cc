@@ -2,17 +2,17 @@
 
 using namespace std;
 
-#define fastio cin.tie(NULL), ios_base::sync_with_stdio(false)
-#define SIZE (int)1e6
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define SIZE (int)(1e5 + 5)
 
-int n, r, q, a, b, dp[SIZE];
+int n, r, q, x, y, dp[SIZE];
 vector<int> adj[SIZE];
 
-int DFS(int parent, int now) {
+int DFS(int now, int parent) {
     int res = 0;
-    for (auto nxt: adj[now]) {
+    for (int nxt: adj[now]) {
         if (nxt == parent) continue;
-        res += DFS(now, nxt);
+        res += DFS(nxt, now);
     }
     return dp[now] = res + 1;
 }
@@ -21,14 +21,15 @@ int main() {
     fastio;
     cin >> n >> r >> q;
     for (int i = 0; i < n - 1; i++) {
-        cin >> a >> b;
-        adj[a].push_back(b);
-        adj[b].push_back(a);
+        cin >> x >> y;
+        adj[x].push_back(y);
+        adj[y].push_back(x);
     }
-    DFS(0, r);
-    for (int i = 0; i < q; i++) {
-        cin >> a;
-        cout << dp[a] << '\n';
+    DFS(r, -1);
+    while (q--) {
+        cin >> x;
+        cout << dp[x] << '\n';
     }
     return 0;
 }
+
