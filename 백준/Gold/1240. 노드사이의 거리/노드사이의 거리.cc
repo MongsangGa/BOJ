@@ -2,39 +2,37 @@
 
 using namespace std;
 
-int n, m, chk[1'001], res;
-vector<pair<int, int>> adj[1'001];
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define SIZE 1002
 
-void dfs(int st, int en, int c) {
-    if (st == en) {
-        res = c;
+int n, m, x, y, c, res;
+vector<pair<int, int>> adj[SIZE];
+
+void DFS(int now, int parent, int cost) {
+    if (now == y) {
+        res = cost;
         return;
     }
-    for (auto [nxt, cost]: adj[st]) {
-        if (chk[nxt]) continue;
-        chk[nxt] = 1;
-        dfs(nxt, en, c + cost);
+    for (auto [nxtN, nxtC]: adj[now]) {
+        if (parent == nxtN) continue;
+        DFS(nxtN, now, cost + nxtC);
     }
-    return;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    fastio;
     cin >> n >> m;
     for (int i = 0; i < n - 1; i++) {
-        int a, b, c;
-        cin >> a >> b >> c;
-        adj[a].push_back({b, c});
-        adj[b].push_back({a, c});
+        cin >> x >> y >> c;
+        adj[x].push_back({y, c});
+        adj[y].push_back({x, c});
     }
     while (m--) {
-        int a, b;
-        memset(chk, 0, sizeof(chk));
-        cin >> a >> b;
-        chk[a] = 1, res = 0;
-        dfs(a, b, 0);
+        res = 0;
+        cin >> x >> y;
+        DFS(x, -1, 0);
         cout << res << '\n';
     }
     return 0;
 }
+
