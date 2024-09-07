@@ -24,9 +24,9 @@ int main() {
         if (!ind[i])
             q.push(i), ans[i] = cost[i];
     while (!q.empty()) {
-        auto now = q.front();
+        int now = q.front();
         q.pop();
-        for (auto nxt: adj[now]) {
+        for (int nxt: adj[now]) {
             --ind[nxt];
             ans[nxt] = max(ans[nxt], ans[now] + cost[nxt]);
             if (!ind[nxt])
