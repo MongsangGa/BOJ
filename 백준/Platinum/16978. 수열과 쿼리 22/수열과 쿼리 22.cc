@@ -18,11 +18,13 @@ ll stree[SIZE * 4], res[SIZE];
 vector<A> a;
 vector<B> b;
 
-ll update(int node, int s, int e, int idx, int diff) {
-    if (idx < s || idx > e) return stree[node];
-    if (s == e) return stree[node] = diff;
+void update(int node, int s, int e, int idx, int diff) {
+    if (idx < s || idx > e) return;
+    stree[node] += diff;
+    if (s == e) return;
     int mid = (s + e) / 2;
-    return stree[node] = update(node * 2, s, mid, idx, diff) + update(node * 2 + 1, mid + 1, e, idx, diff);
+    update(node * 2, s, mid, idx, diff);
+    update(node * 2 + 1, mid + 1, e, idx, diff);
 }
 
 ll query(int node, int s, int e, int qs, int qe) {
@@ -66,7 +68,8 @@ int main() {
             ++bidx;
         }
         auto now = a[i];
-        update(1, 1, n, now.i, now.v);
+        int diff = query(1, 1, n, now.i, now.i);
+        update(1, 1, n, now.i, now.v - diff);
     }
     for (int i = bidx; i < b.size(); i++)
         res[b[i].idx] = query(1, 1, n, b[i].i, b[i].j);
