@@ -1,23 +1,25 @@
 #include<bits/stdc++.h>
 
 using namespace std;
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define S 10'002
 
 int n, k, res;
 
 int main() {
+    fastio;
     cin >> n >> k;
-    vector<int> v(n), dist;
+    vector<int> a(n), d;
     for (int i = 0; i < n; i++)
-        cin >> v[i];
-    sort(v.begin(), v.end());
+        cin >> a[i];
+    sort(a.begin(), a.end());
     for (int i = 1; i < n; i++)
-        dist.push_back(v[i] - v[i - 1]);
-    sort(dist.begin(), dist.end());
+        d.push_back(a[i] - a[i - 1]);
+    sort(d.begin(), d.end());
     for (int i = 0; i < k - 1; i++)
-        if (!dist.empty())
-            dist.pop_back();
-    for (auto &i: dist)
-        res += i;
+        if (!d.empty())
+            d.pop_back();
+    for (auto i: d) res += i;
     cout << res;
     return 0;
 }
