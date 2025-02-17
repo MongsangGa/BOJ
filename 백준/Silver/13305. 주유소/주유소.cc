@@ -1,27 +1,20 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define ll long long
+#define S 100'002
 
-#define MAX 100001
-#define pMAX 1000000001
-
-int n, dist[MAX], price[MAX];
-long long int res;
-stack<int> st;
+int n;
+ll d[S], MIN = INT_MAX, res;
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    fastio;
     cin >> n;
-    for (int i = 0; i < n - 1; i++) cin >> dist[i];
-    for (int i = 0; i < n; i++) cin >> price[i];
-    st.push(pMAX);
-    for (int i = 0; i < n - 1; i++) {
-        if (st.top() > price[i]) {
-            st.pop();
-            st.push(price[i]);
-        }
-        res += st.top() * dist[i];
+    for (int i = 1; i < n; i++) cin >> d[i];
+    for (int i = 1, p; i < n; i++) {
+        cin >> p;
+        if (MIN > p) MIN = p;
+        res += MIN * d[i];
     }
     cout << res;
     return 0;
