@@ -1,37 +1,33 @@
-#include<bits/stdc++.h>
-
+#include <bits/stdc++.h>
 using namespace std;
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
 
-#define MAX 500001
-
-int n, m, a, b, va, vb, root[MAX];
+int n, m, p[500'002];
 
 int find(int x) {
-    if (root[x] == x) return x;
-    return root[x] = find(root[x]);
+    if (p[x] == x) return x;
+    return p[x] = find(p[x]);
 }
 
-void merge(int x, int y) {
-    if (x == y) return;
-    root[y] = x;
+void merge(int u, int v) {
+    if (u == v) return;
+    p[v] = u;
 }
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    fastio;
     cin >> n >> m;
-    for (int i = 0; i <= n; i++)
-        root[i] = i;
-    for (int i = 0; i < m; i++) {
-        cin >> a >> b;
-        va = find(a);
-        vb = find(b);
-        if (va == vb) {
-            cout << i + 1;
-            exit(0);
+    for (int i = 1; i <= n; i++) p[i] = i;
+    for (int i = 1; i <= m; i++) {
+        int u, v;
+        cin >> u >> v;
+        u = find(u), v = find(v);
+        if (u == v) {
+            cout << i;
+            return 0;
         }
-        merge(va, vb);
+        merge(u, v);
     }
-    cout << "0";
+    cout << 0;
     return 0;
 }
