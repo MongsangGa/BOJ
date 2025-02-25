@@ -1,51 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define MAX 501
-int n,m,arr[MAX][MAX],res;
-int tetris[19][4][2]={
-    { {0,0}, {0,1}, {1,0}, {1,1} }, // ㅁ
-    { {0,0}, {0,1}, {0,2}, {0,3} }, // ㅡ
-    { {0,0}, {1,0}, {2,0}, {3,0} },
-    { {0,0}, {0,1}, {0,2}, {1,0} }, // ㄴ
-    { {0,2}, {1,0}, {1,1}, {1,2} },
-    { {0,0}, {1,0}, {1,1}, {1,2} },
-    { {0,0}, {0,1}, {0,2}, {1,2} },
-    { {0,0}, {1,0}, {2,0}, {2,1} },
-    { {0,0}, {0,1}, {1,1}, {2,1} },
-    { {0,0}, {0,1}, {1,0}, {2,0} },
-    { {0,1}, {1,1}, {2,0}, {2,1} },
-    { {0,0}, {1,0}, {1,1}, {2,1} }, // ㄱㄴ
-    { {0,1}, {1,0}, {1,1}, {2,0} },
-    { {0,1}, {0,2}, {1,0}, {1,1} },
-    { {0,0}, {0,1}, {1,1}, {1,2} },
-    { {0,0}, {0,1}, {0,2}, {1,1} }, // ㅗ
-    { {0,1}, {1,0}, {1,1}, {1,2} },
-    { {0,1}, {1,0}, {1,1}, {2,1} },
-    { {0,0}, {1,0}, {1,1}, {2,0} }
-};
-int solve(int x, int y){
-    int sum=0;
-    for(int i=0;i<19;i++){
-        int temp=0;
-        for(int j=0;j<4;j++){
-            int nx=x+tetris[i][j][0], ny=y+tetris[i][j][1];
-            if(nx<0 || ny<0 || nx>=n || ny>=m) continue;
-            temp+=arr[nx][ny];
-        }
-        sum=max(sum,temp);
+#define fastio cin.tie(0), ios_base::sync_with_stdio(0)
+#define S 505
+
+int n, m, a[S][S], v[S][S], res;
+int dx[] = {-1, 0, 1, 0}, dy[] = {0, -1, 0, 1};
+
+void DFS(int x, int y, int cnt, int ans) {
+    if (cnt >= 4) {
+        res = max(res, ans);
+        return;
     }
-    return sum;
+    for (int i = 0; i < 4; i++) {
+        int nx = x + dx[i], ny = y + dy[i];
+        if (nx < 0 || ny < 0 || nx >= n || ny >= m || v[nx][ny]) continue;
+        v[nx][ny] = 1;
+        DFS(nx, ny, cnt + 1, ans + a[nx][ny]);
+        if (cnt == 2) DFS(x, y, cnt + 1, ans + a[nx][ny]);
+        v[nx][ny] = 0;
+    }
 }
+
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin>>n>>m;
-    for(int i=0;i<n;i++)
-        for(int j=0;j<m;j++)
-            cin>>arr[i][j];
-    for(int i=0;i<n;i++)
-        for(int j=0;j<m;j++)
-            res=max(res,solve(i,j));
-    cout<<res;
+    fastio;
+    cin >> n >> m;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            cin >> a[i][j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++) {
+            v[i][j] = 1;
+            DFS(i, j, 1, a[i][j]);
+            v[i][j] = 0;
+        }
+    cout << res;
     return 0;
 }
