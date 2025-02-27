@@ -1,33 +1,30 @@
 #include <bits/stdc++.h>
-
 using namespace std;
 #define fastio cin.tie(0), ios_base::sync_with_stdio(0)
-#define MAX (int)1e9
-int n, m, res;
-vector<int> v;
 
-bool possible(int len) {
-    int cnt = 1, now = v[0];
+int n, c, a[200'002], res;
+
+int F(int l) {
+    int ans = 1, cur = a[0];
     for (int i = 1; i < n; i++)
-        if (v[i] - now >= len)
-            cnt++, now = v[i];
-    if (cnt >= m) return true;
-    return false;
+        if (a[i] - cur >= l)
+            ++ans, cur = a[i];
+    if (ans >= c) return 1;
+    return 0;
 }
 
 int main() {
     fastio;
-    cin >> n >> m;
-    v.resize(n);
-    for (int i = 0; i < n; i++) cin >> v[i];
-    int st = 1, en = MAX;
-    sort(v.begin(), v.end());
-    while (st <= en) {
-        int mid = (st + en) / 2;
-        if (possible(mid)) {
+    cin >> n >> c;
+    for (int i = 0; i < n; i++) cin >> a[i];
+    sort(a, a + n);
+    int s = 1, e = 1e9;
+    while (s <= e) {
+        int mid = (s + e) / 2;
+        if (F(mid)) {
             res = max(res, mid);
-            st = mid + 1;
-        } else en = mid - 1;
+            s = mid + 1;
+        } else e = mid - 1;
     }
     cout << res;
     return 0;
